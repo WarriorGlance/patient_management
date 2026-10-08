@@ -1,0 +1,22 @@
+CREATE DATABASE patient_management;
+
+USE patient_management;
+
+CREATE TABLE patients (
+    Patient_ID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Age INT,
+    Gender VARCHAR(10),
+    Phone VARCHAR(15),
+    Disease VARCHAR(50),
+    Doctor VARCHAR(50),
+    Admission_Date DATE
+);
+
+INSERT INTO patients
+VALUES
+(101, 'Arun Kumar', 45, 'Male', '9876543210', 'Diabetes', 'Dr. Thomas', '2026-10-01'),
+(102, 'Anjali Nair', 32, 'Female', '9847123456', 'Fever', 'Dr. Meera', '2026-10-02'),
+(103, 'Rahul Das', 28, 'Male', '9895123456', 'Asthma', 'Dr. Joseph', '2026-10-03'),
+(104, 'Sneha Menon', 51, 'Female', '9633456789', 'Hypertension', 'Dr. Thomas', '2026-10-04'),
+(105, 'Vivek Raj', 19, 'Male', '9746123456', 'Migraine', 'Dr. Meera', '2026-10-05');
