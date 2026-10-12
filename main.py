@@ -1,10 +1,19 @@
-#CREATE THE DATABASE AND TABLES IN MYSQL BEFORE RUNNING THIS PRG. ALL GIVEN IN TEXT FILE. 
-
 import mysql.connector as MyS
 Pass = input("Enter MYSQL password:")
 
 if Pass:
-     # Connect to MySQL server
+    # Create the database if it does not already exist.
+    server_conn = MyS.connect(
+        host="localhost",
+        user="root",
+        password=Pass,
+    )
+    server_cursor = server_conn.cursor()
+    server_cursor.execute("CREATE DATABASE IF NOT EXISTS patient_management")
+    server_cursor.close()
+    server_conn.close()
+
+    # Connect to the patient management database.
     conn = MyS.connect(
         host="localhost",
         user="root",
@@ -12,6 +21,36 @@ if Pass:
         database="patient_management",
     )
     cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS patients (
+            Patient_ID INT PRIMARY KEY,
+            Name VARCHAR(50),
+            Age INT,
+            Gender VARCHAR(10),
+            Phone VARCHAR(15),
+            Disease VARCHAR(50),
+            Doctor VARCHAR(50),
+            Admission_Date DATE
+        )
+    """)
+    cursor.execute("SELECT 1 FROM patients LIMIT 1")
+    if cursor.fetchone() is None:
+        cursor.executemany(
+            """
+            INSERT INTO patients
+                (Patient_ID, Name, Age, Gender, Phone, Disease, Doctor, Admission_Date)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            [
+                (101, 'Arun Kumar', 45, 'Male', '9876543210', 'Diabetes', 'Dr. Thomas', '2026-10-01'),
+                (102, 'Anjali Nair', 32, 'Female', '9847123456', 'Fever', 'Dr. Meera', '2026-10-02'),
+                (103, 'Rahul Das', 28, 'Male', '9895123456', 'Asthma', 'Dr. Joseph', '2026-10-03'),
+                (104, 'Sneha Menon', 51, 'Female', '9633456789', 'Hypertension', 'Dr. Thomas', '2026-10-04'),
+                (105, 'Vivek Raj', 19, 'Male', '9746123456', 'Migraine', 'Dr. Meera', '2026-10-05'),
+            ],
+        )
+    conn.commit()
 
     def display():
         cursor.execute("SELECT * FROM patients")
